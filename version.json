@@ -1,0 +1,7 @@
+{
+  "version": "1773426488",
+  "manifest_url": "https://raw.githubusercontent.com/SteamDatabase/SteamTracking/master/ClientManifest/steam_client_win64",
+  "sources_url": "https://raw.githubusercontent.com/Selectively11/sm0k3r/main/sources.txt",
+  "steamtools_xinput_sha256": "ddb1f0909c7092f06890674f90b5d4f1198724b05b4bf1e656b4063897340243",
+  "steamtools_dwmapi_sha256": "1ce49ed63af004ad37a4d2921a5659a17001c4c0026d6245fcc0d543e9c265d0"
+}
