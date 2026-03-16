@@ -62,3 +62,17 @@ jobs:
           GH_TOKEN: ${{ github.token }}
         run: |
           gh release upload config version.json --clobber
+
+      - name: Create alert issue
+        if: steps.hashes.outputs.changed == 'true'
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          gh issue create \
+            --title "SteamTools DLLs updated" \
+            --body "SteamTools DLL hashes have changed.
+
+          **xinput1_4.dll**: \`${{ steps.hashes.outputs.old_xinput }}\` -> \`${{ steps.hashes.outputs.new_xinput }}\`
+          **dwmapi.dll**: \`${{ steps.hashes.outputs.old_dwmapi }}\` -> \`${{ steps.hashes.outputs.new_dwmapi }}\`
+
+          Verify SteamTools compatibility and update CloudFix if needed."
