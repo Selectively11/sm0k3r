@@ -1,0 +1,28 @@
+name: Publish Config
+
+on:
+  push:
+    branches: [main]
+    paths:
+      - version.json
+      - sources.txt
+      - steam_client_win64
+
+permissions:
+  contents: write
+
+jobs:
+  publish:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Upload to config release
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          gh release create config --title "Config" --notes "Latest Steam client configuration" 2>/dev/null || true
+          FILES="version.json"
+          [ -f sources.txt ] && FILES="$FILES sources.txt"
+          [ -f steam_client_win64 ] && FILES="$FILES steam_client_win64"
+          gh release upload config $FILES --clobber
