@@ -594,7 +594,8 @@ class Program
         {
             Console.ForegroundColor = ConsoleColor.Red;
             Console.Error.WriteLine("SteamTools servers appear to be down.");
-            Console.Error.WriteLine("Run STFixer to make SteamTools work offline.");
+            Console.Error.WriteLine("Run STFixer to make SteamTools work offline:");
+            Console.Error.WriteLine("  https://github.com/Selectively11/CloudFix/releases");
             Console.ResetColor();
             Console.WriteLine();
             return;
