@@ -592,7 +592,10 @@ class Program
 
         if (!dlOk)
         {
-            Console.Error.WriteLine("ERROR: Failed to download one or more SteamTools DLLs.");
+            Console.ForegroundColor = ConsoleColor.Red;
+            Console.Error.WriteLine("SteamTools servers appear to be down.");
+            Console.Error.WriteLine("Run STFixer to make SteamTools work offline.");
+            Console.ResetColor();
             Console.WriteLine();
             return;
         }
