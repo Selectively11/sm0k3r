@@ -1,0 +1,33 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <OutputType>Exe</OutputType>
+    <TargetFramework>net8.0-windows</TargetFramework>
+    <RuntimeIdentifier>win-x64</RuntimeIdentifier>
+    <ImplicitUsings>enable</ImplicitUsings>
+    <Nullable>enable</Nullable>
+    <AssemblyName>sm0k3r</AssemblyName>
+    <RootNamespace>Sm0k3r</RootNamespace>
+    <PublishSingleFile>true</PublishSingleFile>
+    <SelfContained>true</SelfContained>
+    <PublishTrimmed>true</PublishTrimmed>
+    <TrimMode>partial</TrimMode>
+    <InvariantGlobalization>true</InvariantGlobalization>
+    <Version>0.1.6</Version>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <InternalsVisibleTo Include="Sm0k3r.Tests" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <EmbeddedResource Include="sources.txt" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Compile Remove="Sm0k3r.Tests\**" />
+    <EmbeddedResource Remove="Sm0k3r.Tests\**" />
+    <None Remove="Sm0k3r.Tests\**" />
+  </ItemGroup>
+
+</Project>

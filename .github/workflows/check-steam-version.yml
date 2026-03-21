@@ -1,0 +1,156 @@
+name: Check Steam Client Updates
+
+on:
+  schedule:
+    - cron: '0 * * * *'  # every hour at :00
+  workflow_dispatch:
+
+permissions:
+  contents: write
+  pull-requests: write
+
+jobs:
+  check:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Check for new Steam client version
+        id: check
+        run: |
+          python3 << 'PYEOF'
+          import json, os, re, sys, urllib.request
+
+          MANIFEST_URL = "https://raw.githubusercontent.com/SteamDatabase/SteamTracking/master/ClientManifest/steam_client_win64"
+          CDN = "https://client-update.fastly.steamstatic.com/"
+
+          try:
+              manifest = urllib.request.urlopen(MANIFEST_URL, timeout=30).read().decode("utf-8")
+          except Exception as e:
+              print(f"Failed to fetch manifest: {e}")
+              sys.exit(1)
+
+          def parse_vdf(text):
+              root = {}
+              stack = [root]
+              pending_key = None
+              for line in text.splitlines():
+                  line = line.strip()
+                  if not line:
+                      continue
+                  if line == "{":
+                      if pending_key is not None:
+                          new_dict = {}
+                          stack[-1][pending_key] = new_dict
+                          stack.append(new_dict)
+                          pending_key = None
+                      continue
+                  if line == "}":
+                      if len(stack) > 1:
+                          stack.pop()
+                      continue
+                  parts = re.findall(r'"([^"]*)"', line)
+                  if len(parts) == 2:
+                      stack[-1][parts[0]] = parts[1]
+                  elif len(parts) == 1:
+                      pending_key = parts[0]
+              return root
+
+          vdf = parse_vdf(manifest)
+          win64 = vdf.get("win64", {})
+
+          new_version = win64.get("version")
+          if not new_version:
+              print("ERROR: Could not extract version from manifest")
+              sys.exit(1)
+
+          with open("version.json", "r") as f:
+              config = json.load(f)
+
+          old_version = config["version"]
+          if old_version == new_version:
+              print(f"Version unchanged: {new_version}")
+              sys.exit(0)
+
+          print(f"New version detected: {old_version} -> {new_version}")
+
+          skip_keys = {"version", "ostype"}
+          lines = [
+              f"# Windows (win64) sources for Steam downgrade - version {new_version}",
+              "# Extracted from SteamDatabase/SteamTracking master branch steam_client_win64",
+              "# Format: one URL per line, .zip is the full file, .zip.vz is the compressed delta",
+          ]
+
+          for key, val in win64.items():
+              if key in skip_keys or not isinstance(val, dict):
+                  continue
+
+              if key == "steam_win64":
+                  if "file" in val:
+                      lines.append("")
+                      lines.append(f"# {key}")
+                      lines.append(CDN + val["file"])
+                      if "zipvz" in val:
+                          lines.append(CDN + val["zipvz"])
+                  steamrow = val.get("steamrow")
+                  if isinstance(steamrow, dict) and "file" in steamrow:
+                      lines.append("")
+                      lines.append("# steam_win64_steamrow (region-specific variant)")
+                      lines.append(CDN + steamrow["file"])
+                      if "zipvz" in steamrow:
+                          lines.append(CDN + steamrow["zipvz"])
+              else:
+                  if "file" in val:
+                      lines.append("")
+                      lines.append(f"# {key}")
+                      lines.append(CDN + val["file"])
+                      if "zipvz" in val:
+                          lines.append(CDN + val["zipvz"])
+
+          with open("sources.txt", "w", newline="\n") as f:
+              f.write("\n".join(lines) + "\n")
+
+          config["version"] = new_version
+          with open("version.json", "w", newline="\n") as f:
+              json.dump(config, f, indent=2)
+              f.write("\n")
+
+          with open("steam_client_win64", "w", newline="\n") as f:
+              f.write(manifest)
+
+          with open(os.environ["GITHUB_OUTPUT"], "a") as f:
+              f.write(f"changed=true\n")
+              f.write(f"version={new_version}\n")
+
+          print(f"Updated files for version {new_version}")
+          PYEOF
+
+      - name: Create or update PR
+        if: steps.check.outputs.changed == 'true'
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          VERSION="${{ steps.check.outputs.version }}"
+          BRANCH="steam-update"
+
+          git config user.name "github-actions[bot]"
+          git config user.email "github-actions[bot]@users.noreply.github.com"
+
+          git checkout -B "$BRANCH"
+          git add sources.txt version.json steam_client_win64
+          git commit -m "Steam client update: $VERSION"
+          # Force-push is intentional: only one pending update at a time
+          git push -f origin "$BRANCH"
+
+          EXISTING=$(gh pr list --head "$BRANCH" --json number --jq '.[0].number')
+          if [ -z "$EXISTING" ]; then
+            gh pr create \
+              --title "Steam client update: $VERSION" \
+              --body "New Steam client version detected: **$VERSION**"$'\n\n'"Test SteamTools compatibility before merging." \
+              --head "$BRANCH" \
+              --base main
+          else
+            gh pr edit "$EXISTING" \
+              --title "Steam client update: $VERSION" \
+              --body "New Steam client version detected: **$VERSION**"$'\n\n'"Test SteamTools compatibility before merging."
+          fi

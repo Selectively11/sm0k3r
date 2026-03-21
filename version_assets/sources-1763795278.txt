@@ -1,0 +1,3 @@
+# Windows (win64) sources for Steam downgrade - version 1763795278
+# Extracted from SteamDatabase/SteamTracking
+# Format: one URL per line, .zip is the full file, .zip.vz is the compressed delta

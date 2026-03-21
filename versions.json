@@ -1,0 +1,38 @@
+[
+  {
+    "version": "1773426488",
+    "label": "Mar 13 2026 - SteamTools compatible",
+    "sources_asset": "sources.txt",
+    "manifest_asset": "steam_client_win64"
+  },
+  {
+    "version": "1773099986",
+    "label": "Mar 10 2026",
+    "sources_asset": "sources-1773099986.txt",
+    "manifest_asset": "manifest-1773099986"
+  },
+  {
+    "version": "1769025840",
+    "label": "Jan 22 2026",
+    "sources_asset": "sources-1769025840.txt",
+    "manifest_asset": "manifest-1769025840"
+  },
+  {
+    "version": "1766451605",
+    "label": "Dec 23 2025",
+    "sources_asset": "sources-1766451605.txt",
+    "manifest_asset": "manifest-1766451605"
+  },
+  {
+    "version": "1766177208",
+    "label": "Dec 19 2025",
+    "sources_asset": "sources-1766177208.txt",
+    "manifest_asset": "manifest-1766177208"
+  },
+  {
+    "version": "1763795278",
+    "label": "Nov 26 2025",
+    "sources_asset": "sources-1763795278.txt",
+    "manifest_asset": "manifest-1763795278"
+  }
+]

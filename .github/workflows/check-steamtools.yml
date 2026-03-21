@@ -1,0 +1,78 @@
+name: Check SteamTools DLL Updates
+
+on:
+  schedule:
+    - cron: '0 6 * * *'  # daily at 06:00 UTC
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+jobs:
+  check:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Download DLLs and compute hashes
+        id: hashes
+        run: |
+          curl -sL -o /tmp/xinput.dll "http://update.aaasn.com/update"
+          curl -sL -o /tmp/dwmapi.dll "http://update.aaasn.com/dwmapi"
+
+          NEW_XINPUT=$(sha256sum /tmp/xinput.dll | awk '{print $1}')
+          NEW_DWMAPI=$(sha256sum /tmp/dwmapi.dll | awk '{print $1}')
+
+          OLD_XINPUT=$(jq -r '.steamtools_xinput_sha256 // ""' version.json)
+          OLD_DWMAPI=$(jq -r '.steamtools_dwmapi_sha256 // ""' version.json)
+
+          echo "new_xinput=$NEW_XINPUT" >> "$GITHUB_OUTPUT"
+          echo "new_dwmapi=$NEW_DWMAPI" >> "$GITHUB_OUTPUT"
+          echo "old_xinput=$OLD_XINPUT" >> "$GITHUB_OUTPUT"
+          echo "old_dwmapi=$OLD_DWMAPI" >> "$GITHUB_OUTPUT"
+
+          if [ "$NEW_XINPUT" != "$OLD_XINPUT" ] || [ "$NEW_DWMAPI" != "$OLD_DWMAPI" ]; then
+            echo "changed=true" >> "$GITHUB_OUTPUT"
+          else
+            echo "changed=false" >> "$GITHUB_OUTPUT"
+          fi
+
+      - name: Update version.json
+        if: steps.hashes.outputs.changed == 'true'
+        run: |
+          jq \
+            --arg x "${{ steps.hashes.outputs.new_xinput }}" \
+            --arg d "${{ steps.hashes.outputs.new_dwmapi }}" \
+            '.steamtools_xinput_sha256 = $x | .steamtools_dwmapi_sha256 = $d' \
+            version.json > version.json.tmp && mv version.json.tmp version.json
+
+      - name: Commit and push
+        if: steps.hashes.outputs.changed == 'true'
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "github-actions[bot]@users.noreply.github.com"
+          git add version.json
+          git commit -m "Update SteamTools DLL hashes"
+          git push
+
+      # Push via github.token won't trigger publish-config.yml, so upload directly
+      - name: Upload to config release
+        if: steps.hashes.outputs.changed == 'true'
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          gh release upload config version.json --clobber
+
+      - name: Create alert issue
+        if: steps.hashes.outputs.changed == 'true'
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          gh issue create \
+            --title "SteamTools DLLs updated" \
+            --body "SteamTools DLL hashes have changed.
+
+          **xinput1_4.dll**: \`${{ steps.hashes.outputs.old_xinput }}\` -> \`${{ steps.hashes.outputs.new_xinput }}\`
+          **dwmapi.dll**: \`${{ steps.hashes.outputs.old_dwmapi }}\` -> \`${{ steps.hashes.outputs.new_dwmapi }}\`
+
+          Verify SteamTools compatibility and update CloudFix if needed."
