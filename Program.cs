@@ -287,7 +287,7 @@ class Program
             Console.WriteLine($"  - Delete the package/ directory and download the target Steam version");
             Console.WriteLine($"  - Launch Steam in update mode to apply the {verb}");
             Console.WriteLine("  - Write steam.cfg to block future updates");
-            Console.WriteLine("  - Delete the appcache/ directory to prevent automatic, unintentional update");
+            Console.WriteLine("  - Clean appcache/ (preserving achievement data)");
         }
         if (needsSteamTools)
         {
@@ -358,7 +358,7 @@ class Program
             Console.WriteLine($"  - Delete the package/ directory and download the target Steam version");
             Console.WriteLine($"  - Launch Steam in update mode to apply the {(action == "reinstall" ? "reinstallation" : action)}");
             Console.WriteLine("  - Write steam.cfg to block future updates");
-            Console.WriteLine("  - Delete the appcache/ directory to prevent automatic, unintentional update");
+            Console.WriteLine("  - Clean appcache/ (preserving achievement data)");
             Console.WriteLine();
             Console.WriteLine("You will NOT lose any installed games or game saves. Everything will be preserved, don't worry.");
             Console.WriteLine();
@@ -663,6 +663,11 @@ class Program
 
         Console.WriteLine();
         Console.WriteLine("SteamTools installed successfully. Please log in to Steam to activate.");
+        Console.WriteLine();
+        Console.ForegroundColor = ConsoleColor.Cyan;
+        Console.WriteLine("TIP: If SteamTools servers are down, run CloudFix to enable offline mode:");
+        Console.WriteLine("     https://github.com/Selectively11/CloudFix/releases");
+        Console.ResetColor();
         Console.WriteLine();
     }
 
@@ -1175,16 +1180,120 @@ class Program
     static void NukeAppcache(string steamPath)
     {
         string appcachePath = Path.Combine(steamPath, "appcache");
-        if (Directory.Exists(appcachePath))
+        if (!Directory.Exists(appcachePath))
+            return;
+
+        // Preserve these paths (achievements/stats data)
+        HashSet<string> preserveDirs = new(StringComparer.OrdinalIgnoreCase)
+        {
+            Path.Combine(appcachePath, "stats"),
+        };
+
+        int deleted = 0;
+        int preserved = 0;
+
+        try
+        {
+            // Delete files in appcache root (appinfo.vdf, packageinfo.vdf, etc.)
+            foreach (var file in Directory.GetFiles(appcachePath))
+            {
+                try
+                {
+                    File.Delete(file);
+                    deleted++;
+                }
+                catch { }
+            }
+
+            // Process subdirectories
+            foreach (var dir in Directory.GetDirectories(appcachePath))
+            {
+                // Check if this dir or any parent should be preserved
+                bool shouldPreserve = false;
+                foreach (var preserve in preserveDirs)
+                {
+                    if (dir.Equals(preserve, StringComparison.OrdinalIgnoreCase) ||
+                        preserve.StartsWith(dir + Path.DirectorySeparatorChar, StringComparison.OrdinalIgnoreCase))
+                    {
+                        shouldPreserve = true;
+                        break;
+                    }
+                }
+
+                if (shouldPreserve)
+                {
+                    // This is a parent of something we want to preserve (e.g., httpcache)
+                    // Recursively clean it but preserve the target subdirs
+                    CleanDirectorySelective(dir, preserveDirs, ref deleted, ref preserved);
+                }
+                else
+                {
+                    // Safe to delete entirely
+                    try
+                    {
+                        Directory.Delete(dir, true);
+                        deleted++;
+                    }
+                    catch { }
+                }
+            }
+
+            Console.WriteLine($"Cleaned appcache: {deleted} items deleted, {preserved} preserved (stats)");
+        }
+        catch (Exception ex)
+        {
+            Console.Error.WriteLine($"WARNING: Could not fully clean appcache: {ex.Message}");
+        }
+    }
+
+    static void CleanDirectorySelective(string dir, HashSet<string> preserveDirs, ref int deleted, ref int preserved)
+    {
+        // Delete files in this directory
+        foreach (var file in Directory.GetFiles(dir))
         {
             try
             {
-                Directory.Delete(appcachePath, true);
-                Console.WriteLine($"Deleted appcache directory: {appcachePath}");
+                File.Delete(file);
+                deleted++;
             }
-            catch (Exception ex)
+            catch { }
+        }
+
+        foreach (var subdir in Directory.GetDirectories(dir))
+        {
+            // Check if this exact subdir should be preserved
+            bool exactPreserve = preserveDirs.Contains(subdir);
+            
+            // Check if this is a parent of something to preserve
+            bool isParentOfPreserve = false;
+            foreach (var preserve in preserveDirs)
             {
-                Console.Error.WriteLine($"WARNING: Could not fully delete appcache: {ex.Message}");
+                if (preserve.StartsWith(subdir + Path.DirectorySeparatorChar, StringComparison.OrdinalIgnoreCase))
+                {
+                    isParentOfPreserve = true;
+                    break;
+                }
+            }
+
+            if (exactPreserve)
+            {
+                // Preserve this entire directory
+                preserved++;
+            }
+            else if (isParentOfPreserve)
+            {
+                // Recurse into it
+                CleanDirectorySelective(subdir, preserveDirs, ref deleted, ref preserved);
+            }
+            else
+            {
+                // Safe to delete entirely
+                try
+                {
+                    Directory.Delete(subdir, true);
+                    deleted++;
+                }
+                catch { }
             }
         }
     }
