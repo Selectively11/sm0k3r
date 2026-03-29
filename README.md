@@ -25,4 +25,4 @@ sm0k3r is like [Headcrab](https://github.com/Deadboy666/h3adcr-b) but for Window
 
 ## Related Tools
 
-- **[CloudFix](https://github.com/Selectively11/CloudFix)** — Enable SteamTools offline mode when servers are down, among other features
+- **[CloudFix](https://github.com/Selectively11/CloudFix)** — Lots of good patches for lots
