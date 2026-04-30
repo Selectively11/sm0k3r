@@ -1,4 +1,4 @@
-# Windows (win64) sources for Steam downgrade - version 1773426488
+# Windows (win64) sources for Steam downgrade - version 1777411435
 # Extracted from SteamDatabase/SteamTracking master branch steam_client_win64
 # Format: one URL per line, .zip is the full file, .zip.vz is the compressed delta
 
@@ -7,8 +7,8 @@ https://client-update.fastly.steamstatic.com/tenfoot_images_all.zip.86419c7a56c1
 https://client-update.fastly.steamstatic.com/tenfoot_images_all.zip.vz.193cb8c4eb4446698ea2c0a9e8c4e6b6a623dac7_5572671
 
 # steamui_websrc_all
-https://client-update.fastly.steamstatic.com/steamui_websrc_all.zip.4c399c9492fb52e9e6a380afc7bda671179637ab
-https://client-update.fastly.steamstatic.com/steamui_websrc_all.zip.vz.123317ca751c8681b29c13d3775f3be354537a47_25270429
+https://client-update.fastly.steamstatic.com/steamui_websrc_all.zip.d3488bc3d63108783de103af0dac63cc2398944b
+https://client-update.fastly.steamstatic.com/steamui_websrc_all.zip.vz.fc729bb19ac265d0328369b995a5ddbf7e293264_25490326
 
 # resources_misc_all
 https://client-update.fastly.steamstatic.com/resources_misc_all.zip.99ed79ed868d732d8e9e9a45444b8f003191e3dd
@@ -19,58 +19,58 @@ https://client-update.fastly.steamstatic.com/resources_hidpi_all.zip.a110d78e994
 https://client-update.fastly.steamstatic.com/resources_hidpi_all.zip.vz.3de815c3117712cb9eeb7ea4c8b275faf481dcfd_56342
 
 # resources_all
-https://client-update.fastly.steamstatic.com/resources_all.zip.c22bea6bb0a37e8825e81373b194299da51863be
-https://client-update.fastly.steamstatic.com/resources_all.zip.vz.85b4d339a55c5bb119a43bbbacc2ec13ad768f2d_3081458
+https://client-update.fastly.steamstatic.com/resources_all.zip.1abdcf06a04181de5e35b1b6b99e4513f48388a9
+https://client-update.fastly.steamstatic.com/resources_all.zip.vz.23dbe868ab4292ff88ff3f4b686e1d342ddb0c1f_3175372
 
 # strings_en_all
-https://client-update.fastly.steamstatic.com/strings_en_all.zip.8eef428d222948911a09e2ceb6e5e8a7225b3447
+https://client-update.fastly.steamstatic.com/strings_en_all.zip.894dcb514453afb6008b47290f74accf932dfbd4
 
 # strings_all
-https://client-update.fastly.steamstatic.com/strings_all.zip.789c85285ece798b42a77bb0b103528f922b86dc
-https://client-update.fastly.steamstatic.com/strings_all.zip.vz.42c8d521fd48c07bfc50e6e41bdaa0e135a02bd0_2016053
+https://client-update.fastly.steamstatic.com/strings_all.zip.4a6f10b53afdc9859d41d68473a3aa1d3b21f640
+https://client-update.fastly.steamstatic.com/strings_all.zip.vz.45d08404db838186dc83bf878184bf2cb43e7a2b_2016127
 
 # public_all
-https://client-update.fastly.steamstatic.com/public_all.zip.1842a1dd25473d549b809abcbc221cb5f741c8b9
-https://client-update.fastly.steamstatic.com/public_all.zip.vz.b59e8cfc370939ad523e779e5642472c487a6a9e_23755236
+https://client-update.fastly.steamstatic.com/public_all.zip.c87f6973f40ae6e0d9aa9bd18ba2198c5e4aebbb
+https://client-update.fastly.steamstatic.com/public_all.zip.vz.2741fd214c7b3a780b442d5648ec664114cf2896_23870426
 
 # bins_hardware_all
-https://client-update.fastly.steamstatic.com/bins_hardware_all.zip.9dafc32bc70975960252095a566953737eaeb31d
-https://client-update.fastly.steamstatic.com/bins_hardware_all.zip.vz.e3ae9c91fcb3e7ffd4d94d5ece77421552227836_278242
+https://client-update.fastly.steamstatic.com/bins_hardware_all.zip.0eab7031b13981c0d85e0201a768c25b6acc3f6b
+https://client-update.fastly.steamstatic.com/bins_hardware_all.zip.vz.fa8176e043a59b897b73adc5e4a40238907fcff6_279303
 
 # steamui_websrc_sounds_all
 https://client-update.fastly.steamstatic.com/steamui_websrc_sounds_all.zip.74727ca40ef88c5012bb631488fd285418dce825
 https://client-update.fastly.steamstatic.com/steamui_websrc_sounds_all.zip.vz.5ba6acd8f4dfe4b93437895b20344fab5bb3ff96_3714779
 
 # steamui_websrc_movies_all
-https://client-update.fastly.steamstatic.com/steamui_websrc_movies_all.zip.f556f4b9c7e087e07c0fef2da2b1d9f27f734cff
+https://client-update.fastly.steamstatic.com/steamui_websrc_movies_all.zip.0e22f30c97b54ea7a1b52efdb18a74a71864308d
 
 # bins_codecs_win64
 https://client-update.fastly.steamstatic.com/bins_codecs_win64.zip.5b537e1f6282b05cbc23be726f4c281862fdb4b0
 https://client-update.fastly.steamstatic.com/bins_codecs_win64.zip.vz.930542668e34c3d7bbf1d1f6077ce23b7ce84af7_6702264
 
 # bins_misc_win64
-https://client-update.fastly.steamstatic.com/bins_misc_win64.zip.696df304a6a5c51f1de83d2c88aad5767edea89a
-https://client-update.fastly.steamstatic.com/bins_misc_win64.zip.vz.473b2bcb4d9e07ef6e62c8ea959ac3153c62beda_12130598
+https://client-update.fastly.steamstatic.com/bins_misc_win64.zip.6c9d390b1f4fff2afdad5b713e420894b8825e2c
+https://client-update.fastly.steamstatic.com/bins_misc_win64.zip.vz.e2637e9bd96e34cf631207ff3d7bfd52384d6404_12169864
 
 # bins_hardware_win64
-https://client-update.fastly.steamstatic.com/bins_hardware_win64.zip.ff5ec3382e5af049e00ad1d899d4d9fb1b1dfa17
+https://client-update.fastly.steamstatic.com/bins_hardware_win64.zip.235e004bfda0def4de83f82f3e9171f14947d4ca
 
 # bins_win64
-https://client-update.fastly.steamstatic.com/bins_win64.zip.42ca367ce66737bcdff183b4e3bec388a16ab565
-https://client-update.fastly.steamstatic.com/bins_win64.zip.vz.b43ae64c12520a7c6f3115d67372acfe1d2e3c9d_34272016
+https://client-update.fastly.steamstatic.com/bins_win64.zip.729f249fe7098cc6f72a743adb486e53f80dec9e
+https://client-update.fastly.steamstatic.com/bins_win64.zip.vz.d65eb69fbc8710e2e4048a17faeefe57744bbbc9_34369936
 
 # bins_cef_win64
 https://client-update.fastly.steamstatic.com/bins_cef_win64.zip.d1e59a2414ada9073ebb8a55aba0a2529f30e049
 https://client-update.fastly.steamstatic.com/bins_cef_win64.zip.vz.e5014c86c71fc115143f873bf250cc4c3d7726f9_105987388
 
 # bins_webhelpers_win64
-https://client-update.fastly.steamstatic.com/bins_webhelpers_win64.zip.07242ac055ce165e74f4830d23240e5965a869b4
-https://client-update.fastly.steamstatic.com/bins_webhelpers_win64.zip.vz.595a88582cad5da515eb01af2d8722025969b682_2467138
+https://client-update.fastly.steamstatic.com/bins_webhelpers_win64.zip.01b561b2a8590e8ba75eb898a67f81d57698d117
+https://client-update.fastly.steamstatic.com/bins_webhelpers_win64.zip.vz.3ed28c4b64e9826658e1e62c029f0662cb4d7dd6_2468695
 
 # steam_win64
-https://client-update.fastly.steamstatic.com/steam_win64.zip.35846f7156b43c4ca8354447831f7d67ca5ad477
-https://client-update.fastly.steamstatic.com/steam_win64.zip.vz.34e6e5bea10eea4e0398dcce396ccc6a3c6db2a2_2147949
+https://client-update.fastly.steamstatic.com/steam_win64.zip.f36017f7a1d771a6754276b0416a3bbac59be317
+https://client-update.fastly.steamstatic.com/steam_win64.zip.vz.cfee590061d8a1837d221184685d54e92ff22acc_2148911
 
 # steam_win64_steamrow (region-specific variant)
-https://client-update.fastly.steamstatic.com/steam_win64_steamrow.zip.35846f7156b43c4ca8354447831f7d67ca5ad477
-https://client-update.fastly.steamstatic.com/steam_win64_steamrow.zip.vz.34e6e5bea10eea4e0398dcce396ccc6a3c6db2a2_2147949
+https://client-update.fastly.steamstatic.com/steam_win64_steamrow.zip.f36017f7a1d771a6754276b0416a3bbac59be317
+https://client-update.fastly.steamstatic.com/steam_win64_steamrow.zip.vz.cfee590061d8a1837d221184685d54e92ff22acc_2148911
